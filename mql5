@@ -1,0 +1,149 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                     Demand And Supply Diagram MT5 |
+//|                                   Copyright © 2022, Forex Robot Easy Team |
+//|                                                     https://www.forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+// Input variables
+input int period = 14; // Period for price/volume analysis
+
+// Signal generation based on price/volume values
+bool GenerateSignals(double price, double volume)
+{
+    // Implement your logic for signal generation based on price/volume values
+    // Return true if a signal is generated, false otherwise
+}
+
+// Detection of excess demand (ED) and excess supply (ES)
+bool IsExcessDemand(double price, double volume)
+{
+    // Implement your logic for detecting excess demand based on price/volume values
+    // Return true if there is excess demand, false otherwise
+}
+
+bool IsExcessSupply(double price, double volume)
+{
+    // Implement your logic for detecting excess supply based on price/volume values
+    // Return true if there is excess supply, false otherwise
+}
+
+// Identification of no demand (ND) and no supply (NS)
+bool IsNoDemand(double price, double volume)
+{
+    // Implement your logic for identifying no demand based on price/volume values
+    // Return true if there is no demand, false otherwise
+}
+
+bool IsNoSupply(double price, double volume)
+{
+    // Implement your logic for identifying no supply based on price/volume values
+    // Return true if there is no supply, false otherwise
+}
+
+// Display of warning messages 'Sell area' and 'Buy area'
+void DisplaySellArea()
+{
+    // Implement your logic for displaying the 'Sell area' warning message
+}
+
+void DisplayBuyArea()
+{
+    // Implement your logic for displaying the 'Buy area' warning message
+}
+
+// Monitoring the sequence of signals
+bool IsSignalSequenceValid(Signal[] signals)
+{
+    // Implement your logic for monitoring the sequence of signals
+    // Return true if the sequence is valid, false otherwise
+}
+
+// Determining the elasticity of demand/supply to the price
+double CalculateElasticity(double price, double demand, double supply)
+{
+    // Implement your logic for calculating the elasticity of demand/supply to the price
+    // Return the calculated elasticity value
+}
+
+// Providing a confirmation message 'Buy point' or 'Sell point'
+void DisplayConfirmationMessage(bool isBuyPoint)
+{
+    // Implement your logic for displaying the confirmation message
+    // If isBuyPoint is true, display 'Buy point', otherwise display 'Sell point'
+}
+
+// Customization through input variables
+void CustomizeInputs()
+{
+    // Implement your logic for customizing the input variables
+}
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Customization
+    CustomizeInputs();
+    
+    return INIT_SUCCEEDED;
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    // Perform any necessary cleanup tasks
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Get the current price and volume
+    double price = MarketInfo(Symbol(), MODE_BID);
+    double volume = MarketInfo(Symbol(), MODE_VOLUME);
+    
+    // Generate signals based on price/volume values
+    if (GenerateSignals(price, volume))
+    {
+        // Check for excess demand and excess supply
+        if (IsExcessDemand(price, volume))
+        {
+            DisplaySellArea();
+        }
+        else if (IsExcessSupply(price, volume))
+        {
+            DisplayBuyArea();
+        }
+        
+        // Check for no demand and no supply
+        if (IsNoDemand(price, volume))
+        {
+            DisplaySellArea();
+        }
+        else if (IsNoSupply(price, volume))
+        {
+            DisplayBuyArea();
+        }
+        
+        // Confirm the signal based on the sequence and elasticity
+        Signal[] signals = GetSignalSequence();
+        if (IsSignalSequenceValid(signals))
+        {
+            double elasticity = CalculateElasticity(price, signals[0].demand, signals[0].supply);
+            if (elasticity > 0)
+            {
+                DisplayConfirmationMessage(true); // Buy point
+            }
+            else if (elasticity < 0)
+            {
+                DisplayConfirmationMessage(false); // Sell point
+            }
+        }
+    }
+}
+
